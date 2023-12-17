@@ -66,55 +66,6 @@ class Sudoku:
             initial_domains=self.grid.initial_domains,
         )
 
-    def generate(self, *, difficulty: str, destination_path: str) -> None:
-        """Generates a Sudoku puzzle with specified difficulty and saves it to a file.
-
-        This method uses the backtracking algorithm to generate a Sudoku puzzle with a unique
-        solution. (uniqueness not yet implemented)
-        The generated puzzle is then saved to the specified file in the following format:
-
-        6.5.4213.
-        .2.13..7.
-        1....6...
-        3..7.....
-        ......8..
-        ......24.
-        ..1.2....
-        .....7..4
-        4..3..5.8
-
-        :param difficulty: the difficulty level of the generated Sudoku puzzle. Options are "easy",
-        "medium", or "hard".
-        :param destination_path: path to the file where the generated Sudoku puzzle will be saved.
-        """
-        backtracking(
-            grid=self.grid,
-            domains=self.grid.domains,
-            initial_domains=self.grid.initial_domains,
-            mode="generate",
-        )
-
-        match difficulty:
-            case "easy":
-                cells_to_remove = random.randint(25, 30)
-            case "medium":
-                cells_to_remove = random.randint(35, 40)
-            case "hard":
-                cells_to_remove = random.randint(45, 50)
-            case _:
-                raise ValueError(f"Unknown difficulty '{difficulty}'")
-
-        for _ in range(cells_to_remove):
-            row, col = np.random.randint(9, size=2)
-            while self.grid.get_value((row, col)) == 0:
-                row, col = np.random.randint(9, size=2)
-            self.grid.domains.reinitialize_domain(
-                domain_index=(row, col), initial_domains=self.grid.initial_domains
-            )
-            self.grid.reinitialize_value((row, col))
-
-        self._save_to_file(Path(destination_path))
-
     def check_consistency(self) -> bool:
         """Checks the consistency of the sudoku.
 
