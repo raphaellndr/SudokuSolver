@@ -31,22 +31,3 @@ def solve_sudoku(file_path: str = typer.Argument(..., help="Path to sudoku file.
 
     print("SOLVED SUDOKU:\n\n" + sudoku.humanize() + "\n")
     print(f"ELAPSED TIME: {end}")
-
-
-@app.command("generate", no_args_is_help=True)
-def generate_sudoku(
-    destination_path: str = typer.Argument(..., help="Path to destination folder."),
-    difficulty: SudokuDifficulty = typer.Option(
-        SudokuDifficulty.EASY, help="Difficulty of the generated Sudoku."
-    ),
-) -> None:
-    """Generates a sudoku.
-
-    DOES NOT ENSURE UNIQUENESS YET.
-
-    :param destination_path: path to destination folder.
-    :param difficulty: difficulty of the generated Sudoku. Options are 'easy', 'medium', or 'hard'.
-    """
-    sudoku = Sudoku()
-    sudoku.generate(difficulty=difficulty.value, destination_path=destination_path)
-    print("GENERATED SUDOKU:\n\n" + sudoku.humanize())
