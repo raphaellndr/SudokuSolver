@@ -1,0 +1,58 @@
+repos:
+ - repo: local
+
+   hooks:
+
+   # Code formatting
+
+   - id: black
+     name: black
+     description: Python code formatting.
+     stages: [commit]
+     language: python
+     entry: black
+     types: [python]
+
+   - id: ruff
+     name: ruff
+     stages: [commit]
+     language: python
+     entry: ruff
+     types: [python]
+
+   # Code analysis
+
+   - id: mypy
+     name: mypy
+     description: Performs static type checking of source code written in Python.
+     stages: [commit]
+     language: python
+     entry: mypy
+     types: [python]
+     pass_filenames: false
+
+   - id: pylint
+     name: pylint
+     description: Performs static analysis of source code written in Python.
+     stages: [commit]
+     language: python
+     entry: pylint
+     types: [python]
+
+    # Local tests
+
+   - id: pytest
+     name: pytest
+     stages: [commit]
+     language: python
+     entry: pytest
+     types: [python]
+     pass_filenames: false
+
+   - id: pytest-cov
+     name: pytest-cov
+     stages: [push]
+     language: python
+     entry: pytest
+     types: [python]
+     pass_filenames: false

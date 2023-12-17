@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "$0")/..";pwd)"
+cd "$PROJECT_ROOT"
+
+PYTEST_OPTS="--junitxml=build/test-report.xml --html=build/test-report.html --self-contained-html"
+
+rm -f .coverage*
+
+poetry run pytest --cov
