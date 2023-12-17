@@ -5,12 +5,12 @@ repos:
 
    # Code formatting
 
-   - id: black
-     name: black
+   - id: ruff-format
+     name: ruff-format
      description: Python code formatting.
      stages: [commit]
      language: python
-     entry: black
+     entry: ruff format
      types: [python]
 
    - id: ruff
