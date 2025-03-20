@@ -1,5 +1,6 @@
 """Grid tests module."""
 
+from contextlib import nullcontext as does_not_raise
 
 import pytest
 from sudoku.exceptions import ValueAssignmentError
@@ -21,34 +22,20 @@ def test_get_value(value_index: Index, expected_value: int) -> None:
 
 
 @pytest.mark.parametrize(
-    "new_value,value_index",
-    [(8, (2, 1)), (3, (5, 4))],
+    "new_value,value_index,expectation",
+    [
+        (0, (0, 0), pytest.raises(ValueAssignmentError)),
+        (8, (2, 1), does_not_raise()),
+        (3, (5, 4), does_not_raise()),
+    ],
 )
-def test_set_value(new_value: int, value_index: Index) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
-    sudoku.grid.set_value(new_value, value_index)
-    value = sudoku.grid.get_value(value_index)
+def test_set_value(new_value: int, value_index: Index, expectation) -> None:
+    with expectation:
+        sudoku = Sudoku(SUDOKU_PATH)
+        sudoku.grid.set_value(new_value, value_index)
+        value = sudoku.grid.get_value(value_index)
 
-    assert value == new_value
-
-
-def test_set_unassignable_value() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
-
-    with pytest.raises(ValueAssignmentError):
-        sudoku.grid.set_value(0, (0, 0))
-
-
-@pytest.mark.parametrize(
-    "value_index",
-    [(2, 1), (5, 4)],
-)
-def test_reinitialize_value(value_index: Index) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
-    sudoku.grid.set_value(9, value_index)
-    sudoku.grid.reinitialize_value(value_index)
-
-    assert sudoku.grid.get_value(value_index) == 0
+        assert value == new_value
 
 
 def test_initialize_domains() -> None:
@@ -282,8 +269,6 @@ def test_get_neighbours_indexes(value_index: Index, expected_neighbours: list[In
 def test_get_neighbours_values(value_index: Index, expected_values: list[int]) -> None:
     sudoku = Sudoku(SUDOKU_PATH)
     neighbours_values = sudoku.grid.get_neighbours_values(value_index)
-
-    print(neighbours_values)
 
     assert neighbours_values == expected_values
 

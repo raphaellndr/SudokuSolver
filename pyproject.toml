@@ -15,22 +15,18 @@ packages = [
 [tool.poetry.dependencies]
 python = "~3.11"
 typer = "0.12.1"
-numpy = "1.26.4"
+numpy = "2.2.4"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.4.9"
-black = "^24.4.2"
-pylint = "^3.2.3"
-mypy = "^1.10"
-pre-commit = "^3.7.1"
-pytest = "^8.2.2"
-pytest-cov = "^5.0.0"
+ruff = "0.9.6"
+pylint = "3.3.5"
+mypy = "1.15.0"
+pre-commit = "4.1.0"
+pytest = "8.3.5"
+pytest-cov = "6.0.0"
 
 [tool.poetry.scripts]
 sudoku = "sudoku.__main__:main"
-
-[tool.black]
-line-length = 100
 
 [tool.pylint.basic]
 good-names = [
@@ -48,24 +44,6 @@ ignore-patterns = "test_.*?py"
 
 [tool.mypy]
 files = ["src/sudoku"]
-
-[tool.ruff]
-# Same as Black.
-line-length = 100
-indent-width = 4
-target-version = "py311"
-fix = true
-select = ["E", "F", "I"]
-
-[tool.ruff.format]
-# Like Black, use double quotes for strings.
-quote-style = "double"
-# Like Black, indent with spaces, rather than tabs.
-indent-style = "space"
-# Like Black, respect magic trailing commas.
-skip-magic-trailing-comma = false
-# Like Black, automatically detect the appropriate line ending.
-line-ending = "auto"
 
 [tool.coverage.report]
 show_missing = true
