@@ -3,7 +3,7 @@ requires = ["poetry-core>=1.5.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "sudokuresolver"
+name = "sudoku-resolver"
 version = "0.0.0"
 description = "Solve sudokus using CSPs and Python."
 authors = ["raphaellndr"]
@@ -26,7 +26,7 @@ pytest = "8.3.5"
 pytest-cov = "6.0.0"
 
 [tool.poetry.scripts]
-sudokuresolver = "sudoku.__main__:main"
+sudoku-resolver = "sudoku.__main__:main"
 
 [tool.pylint.basic]
 good-names = [
