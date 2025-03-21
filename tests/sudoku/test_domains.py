@@ -1,10 +1,12 @@
 """Domains tests module."""
 
+import re
+
 import pytest
+
 from sudoku.domains import Domain
 from sudoku.grid import Index
 from sudoku.sudoku import Sudoku
-
 from tests import SUDOKU_PATH
 
 
@@ -12,7 +14,7 @@ from tests import SUDOKU_PATH
     "domain_index,expected_domain", [((0, 1), {7, 8, 9}), ((2, 7), {2, 5, 8, 9})]
 )
 def test_reinitialize_domain(domain_index: Index, expected_domain: Domain | None) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     sudoku.grid.domains.set_domain({99}, domain_index)
     sudoku.grid.domains.reinitialize_domain(
         domain_index=domain_index, initial_domains=sudoku.grid.initial_domains
@@ -29,7 +31,7 @@ def test_reinitialize_domain(domain_index: Index, expected_domain: Domain | None
     ],
 )
 def test_get_domain(domain_index: Index, expected_domain: Domain | None) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     domain = sudoku.grid.domains.get_domain(domain_index)
 
     assert domain == expected_domain
@@ -43,16 +45,16 @@ def test_get_domain(domain_index: Index, expected_domain: Domain | None) -> None
     ],
 )
 def test_set_domain(domain_index: Index, expected_domain: Domain | None) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     sudoku.grid.domains.set_domain(expected_domain, domain_index)
 
     assert sudoku.grid.domains.get_domain(domain_index) == expected_domain
 
 
 def test_set_none_domain() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=re.escape("Tried to set a 'None' domain at '(0, 0)'")):
         sudoku.grid.domains.set_domain(set(), (0, 0))
 
 
@@ -66,7 +68,7 @@ def test_set_none_domain() -> None:
 def test_pop_value_from_domain(
     domain_index: Index, value: int, expected_domain: Domain | None
 ) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     sudoku.grid.domains.pop_value_from_domain(value, domain_index)
     domain = sudoku.grid.domains.get_domain(domain_index)
 

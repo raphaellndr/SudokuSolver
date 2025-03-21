@@ -31,7 +31,8 @@ class Domains:
         :param domain_index: index of the domain to set.
         """
         if self.get_domain(domain_index) is None:
-            raise ValueError(f"Tried to set a 'None' domain at '{domain_index}'")
+            error_msg = f"Tried to set a 'None' domain at '{domain_index}'"
+            raise ValueError(error_msg)
         self.domains[domain_index[0]][domain_index[1]] = domain
 
     def reinitialize_domain(

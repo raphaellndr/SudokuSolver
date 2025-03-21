@@ -3,10 +3,10 @@
 from contextlib import nullcontext as does_not_raise
 
 import pytest
+
 from sudoku.exceptions import ValueAssignmentError
 from sudoku.grid import Index
 from sudoku.sudoku import Sudoku
-
 from tests import SUDOKU_PATH
 
 
@@ -15,7 +15,7 @@ from tests import SUDOKU_PATH
     [((0, 0), 6), ((2, 1), 0), ((5, 4), 0)],
 )
 def test_get_value(value_index: Index, expected_value: int) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     value = sudoku.grid.get_value(value_index)
 
     assert value == expected_value
@@ -31,7 +31,7 @@ def test_get_value(value_index: Index, expected_value: int) -> None:
 )
 def test_set_value(new_value: int, value_index: Index, expectation) -> None:
     with expectation:
-        sudoku = Sudoku(SUDOKU_PATH)
+        sudoku = Sudoku.from_file(SUDOKU_PATH)
         sudoku.grid.set_value(new_value, value_index)
         value = sudoku.grid.get_value(value_index)
 
@@ -39,7 +39,7 @@ def test_set_value(new_value: int, value_index: Index, expectation) -> None:
 
 
 def test_initialize_domains() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
 
     assert sudoku.grid.domains.domains == [
         [
@@ -155,7 +155,7 @@ def test_initialize_domains() -> None:
 def test_get_horizontal_neighbours_indexes(
     value_index: Index, expected_indexes: list[Index]
 ) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     horizontal_neighbours_indexes = sudoku.grid.get_horizontal_neighbours_indexes(value_index)
 
     assert horizontal_neighbours_indexes == expected_indexes
@@ -170,7 +170,7 @@ def test_get_horizontal_neighbours_indexes(
     ],
 )
 def test_get_vertical_neighbours_indexes(value_index: Index, expected_indexes: list[Index]) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     vertical_neighbours_indexes = sudoku.grid.get_vertical_neighbours_indexes(value_index)
 
     assert vertical_neighbours_indexes == expected_indexes
@@ -185,7 +185,7 @@ def test_get_vertical_neighbours_indexes(value_index: Index, expected_indexes: l
     ],
 )
 def test_get_subgrid_neighbours_indexes(value_index: Index, expected_indexes: list[Index]) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     subgrid_neighbours_indexes = sudoku.grid.get_subgrid_neighbours_indexes(value_index)
 
     assert subgrid_neighbours_indexes == expected_indexes
@@ -247,7 +247,7 @@ def test_get_subgrid_neighbours_indexes(value_index: Index, expected_indexes: li
     ],
 )
 def test_get_neighbours_indexes(value_index: Index, expected_neighbours: list[Index]) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     neighbours = sudoku.grid.get_neighbours_indexes(value_index)
 
     assert sorted(neighbours) == expected_neighbours
@@ -267,7 +267,7 @@ def test_get_neighbours_indexes(value_index: Index, expected_neighbours: list[In
     ],
 )
 def test_get_neighbours_values(value_index: Index, expected_values: list[int]) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     neighbours_values = sudoku.grid.get_neighbours_values(value_index)
 
     assert neighbours_values == expected_values
@@ -384,7 +384,7 @@ def test_get_neighbours_values(value_index: Index, expected_values: list[int]) -
     ],
 )
 def test_get_neighbours_domains_values(value_index: Index, expected_values: list[int]) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     neighbours_domains_values = sudoku.grid.get_neighbours_domains_values(value_index)
 
     assert neighbours_domains_values == expected_values
@@ -399,14 +399,14 @@ def test_get_neighbours_domains_values(value_index: Index, expected_values: list
     ],
 )
 def test_check_constraints(value: int, value_index: Index, expected_result: bool) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     constraints = sudoku.grid.check_constraints(value=value, value_index=value_index)
 
     assert constraints == expected_result
 
 
 def test_minimum_remaining_value() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     mrv = sudoku.grid.minimum_remaining_value()
 
     assert mrv == [(0, 8)]
@@ -421,7 +421,7 @@ def test_minimum_remaining_value() -> None:
     ],
 )
 def test_least_constraining_value(value_index: Index, expected_lcv: int) -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     lcv = sudoku.grid.least_constraining_value(value_index)
 
     assert lcv == expected_lcv

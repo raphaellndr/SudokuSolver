@@ -1,5 +1,3 @@
-"""Module defining a sudoku."""
-
 from pathlib import Path
 
 import numpy as np
@@ -11,62 +9,77 @@ from .grid import Grid
 
 
 class Sudoku:
-    """Defines a sudoku."""
+    """Represents a Sudoku."""
 
-    def __init__(self, file_path: str | Path | None = None) -> None:
-        if file_path is not None:
-            if isinstance(file_path, str):
-                self.file_path = Path(file_path)
-            else:
-                self.file_path = file_path
-            self._values = self._get_values()
+    def __init__(self, *, values: str | None = None, filepath: str | Path | None = None) -> None:
+        """Initializes the Sudoku object.
+
+        :param values: Sudoku grid as a string.
+        :param filepath: Path to the file containing the Sudoku grid.
+        """
+        if values is not None:
+            self._values = np.array(list(values), dtype=np.uint8).reshape(9, 9)
+        elif filepath is not None:
+            if isinstance(filepath, str):
+                filepath = Path(filepath)
+            self._values = self._parse_file(filepath)
         else:
-            self._values = np.zeros((9, 9), dtype=np.uint8)
+            raise ValueError("Either values or filepath must be provided")
+
         self._grid = Grid(self._values)
 
     @property
     def grid(self) -> Grid:
-        """Returns grid containing the sudoku."""
+        """Returns the Sudoku grid."""
         return self._grid
 
-    def _get_values(self) -> npt.NDArray[np.uint8]:
+    @classmethod
+    def from_file(cls, filepath: str | Path) -> "Sudoku":
+        """Alternative constructor to create a Sudoku from a file.
+
+        :param filepath: Path to the file containing the Sudoku.
+        :returns: `Sudoku`.
+        """
+        return cls(filepath=filepath)
+
+    @classmethod
+    def from_string(cls, values: str) -> "Sudoku":
+        """Alternative constructor to create a Sudoku from a string.
+
+        :param values: Sudoku grid as a string.
+        :returns: `Sudoku`.
+        """
+        return cls(values=values)
+
+    def _parse_file(self, filepath: Path) -> npt.NDArray[np.uint8]:
         """Gets values contained in raw file.
 
         Each dot is converted to a 0.
 
+        :param filepath: path to the file containing the Sudoku grid.
         :returns: `np.ndarray` containing converted values.
         """
-        with open(self.file_path, encoding="utf-8") as stream:
+        with Path.open(filepath, encoding="utf-8") as stream:
             lines = [line.strip() for line in stream.readlines()]
         array = np.array(
-            [[int(c) if c != "." else 0 for c in line] for _, line in enumerate(lines)],
+            [[int(c) if c != "." else 0 for c in line] for line in lines],
             dtype=np.uint8,
         )
+        if array.shape != (9, 9):
+            error_message = "Invalid Sudoku file"
+            raise ValueError(error_message)
         return array
-
-    def _save_to_file(self, file_path: Path) -> None:
-        """Saves the sudoku grid to a file in the specified format.
-
-        :param file_path: path to the file where the sudoku grid will be saved.
-        """
-        with open(file_path, "w", encoding="utf-8") as file:
-            for row in range(9):
-                line = ""
-                for col in range(9):
-                    value = self._values[row, col]
-                    line += str(value) if value != 0 else "."
-                file.write(line + "\n")
 
     def solve(self) -> None:
         """Calls backtracking algorithm to solve the sudoku."""
         backtracking(
-            grid=self.grid,
-            domains=self.grid.domains,
-            initial_domains=self.grid.initial_domains,
+            grid=self._grid,
+            domains=self._grid.domains,
+            initial_domains=self._grid.initial_domains,
         )
 
     def check_consistency(self) -> bool:
-        """Checks the consistency of the sudoku.
+        """Checks if the sudoku is consistent.
 
         :returns: `True` if the sudoku is consistent, `False` otherwise.
         :raises: `ConsistencyError` if sudoku is inconsistent.
@@ -74,7 +87,7 @@ class Sudoku:
         for index in self.grid.assigned_values_indexes:
             value = self.grid.get_value(index)
             if not self.grid.check_constraints(value=value, value_index=index):
-                raise ConsistencyError(file_path=self.file_path, value_index=index)  # type:ignore
+                raise ConsistencyError(value_index=index)  # type:ignore
         return True
 
     def humanize(self) -> str:
@@ -96,3 +109,28 @@ class Sudoku:
             )
 
         return formatted_sudoku
+
+    def to_string(self) -> str:
+        """Converts the Sudoku to a string representation.
+
+        :returns: String of 81 characters representing the Sudoku.
+        """
+        return "".join(str(val) for val in self._values.flatten())
+
+    def save(self, filepath: str | Path) -> None:
+        """Saves the Sudoku to a file.
+
+        :param filepath: Path where the Sudoku will be saved.
+        """
+        path = Path(filepath) if isinstance(filepath, str) else filepath
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        formatted = ""
+        for row in self._values:
+            formatted += "".join(str(val) if val != 0 else "." for val in row) + "\n"
+
+        with Path.open(path, "w", encoding="utf-8") as f:
+            f.write(formatted)
+
+    def __str__(self) -> str:
+        return self.humanize()

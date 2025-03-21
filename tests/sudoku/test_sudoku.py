@@ -2,14 +2,14 @@
 
 import numpy as np
 import pytest
+
 from sudoku.exceptions import ConsistencyError
 from sudoku.sudoku import Sudoku
-
 from tests import SUDOKU_PATH
 
 
 def test_initialize_values() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
 
     assert (
         sudoku.grid._values
@@ -31,7 +31,7 @@ def test_initialize_values() -> None:
 
 
 def test_solve_sudoku() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     sudoku.solve()
 
     assert (
@@ -54,14 +54,14 @@ def test_solve_sudoku() -> None:
 
 
 def test_check_consistency() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     sudoku.solve()
 
     assert sudoku.check_consistency()
 
 
 def test_check_inconsistency() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     sudoku.solve()
     sudoku.grid._values[0][0] = 1
 
@@ -70,7 +70,7 @@ def test_check_inconsistency() -> None:
 
 
 def test_humanize() -> None:
-    sudoku = Sudoku(SUDOKU_PATH)
+    sudoku = Sudoku.from_file(SUDOKU_PATH)
     sudoku.solve()
 
     assert (

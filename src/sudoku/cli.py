@@ -21,7 +21,7 @@ class SudokuDifficulty(Enum):
 @app.command("solve", no_args_is_help=True)
 def solve_sudoku(file_path: str = typer.Argument(..., help="Path to sudoku file.")) -> None:
     """Solves a sudoku."""
-    sudoku = Sudoku(file_path)
+    sudoku = Sudoku.from_file(file_path)
     print(sudoku.humanize())
 
     start = time()
