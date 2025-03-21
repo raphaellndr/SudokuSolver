@@ -9,7 +9,7 @@ description = "Solve sudokus using CSPs and Python."
 authors = ["raphaellndr"]
 readme = "README.md"
 packages = [
-    {include="sudoku-resolver", from="src"}
+    {include="sudoku_resolver", from="src"}
 ]
 
 [tool.poetry.dependencies]
@@ -26,7 +26,7 @@ pytest = "8.3.5"
 pytest-cov = "6.0.0"
 
 [tool.poetry.scripts]
-sudoku-resolver = "sudoku-resolver.__main__:main"
+sudoku-resolver = "sudoku_resolver.__main__:main"
 
 [tool.pylint.basic]
 good-names = [
@@ -43,11 +43,11 @@ ignore = [".git", ".venv", "scripts"]
 ignore-patterns = "test_.*?py"
 
 [tool.mypy]
-files = ["src/sudoku-resolver"]
+files = ["src/sudoku_resolver"]
 
 [tool.coverage.report]
 show_missing = true
 fail_under = 10
 
 [tool.coverage.run]
-source = ["src/sudoku-resolver"]
+source = ["src/sudoku_resolver"]

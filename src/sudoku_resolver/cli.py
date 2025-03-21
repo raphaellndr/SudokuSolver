@@ -5,7 +5,7 @@ from time import time
 
 import typer
 
-from sudoku.sudoku import Sudoku
+from sudoku_resolver.sudoku import Sudoku
 
 app = typer.Typer(no_args_is_help=True)
 

@@ -1,9 +1,9 @@
-import sudoku
+import sudoku_resolver
 
 
 def test_version() -> None:
-    assert sudoku.__version__ is not None
+    assert sudoku_resolver.__version__ is not None
 
 
 def test_program_name() -> None:
-    assert sudoku.PROGRAM_NAME is not None
+    assert sudoku_resolver.PROGRAM_NAME is not None

@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING, TypeAlias
 
 if TYPE_CHECKING:
-    from sudoku.grid import Index
+    from sudoku_resolver.grid import Index
 
 Domain: TypeAlias = set[int]
 

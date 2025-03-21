@@ -3,8 +3,8 @@
 import numpy as np
 import pytest
 
-from sudoku.exceptions import ConsistencyError
-from sudoku.sudoku import Sudoku
+from sudoku_resolver.exceptions import ConsistencyError
+from sudoku_resolver.sudoku import Sudoku
 from tests import SUDOKU_PATH
 
 

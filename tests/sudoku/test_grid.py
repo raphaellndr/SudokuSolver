@@ -4,9 +4,9 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from sudoku.exceptions import ValueAssignmentError
-from sudoku.grid import Index
-from sudoku.sudoku import Sudoku
+from sudoku_resolver.exceptions import ValueAssignmentError
+from sudoku_resolver.grid import Index
+from sudoku_resolver.sudoku import Sudoku
 from tests import SUDOKU_PATH
 
 

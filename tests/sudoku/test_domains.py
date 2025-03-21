@@ -4,9 +4,9 @@ import re
 
 import pytest
 
-from sudoku.domains import Domain
-from sudoku.grid import Index
-from sudoku.sudoku import Sudoku
+from sudoku_resolver.domains import Domain
+from sudoku_resolver.grid import Index
+from sudoku_resolver.sudoku import Sudoku
 from tests import SUDOKU_PATH
 
 
