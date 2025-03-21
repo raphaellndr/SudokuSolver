@@ -1,13 +1,15 @@
 """Module containing methods to solve a sudoku."""
 
-import random
+from random import SystemRandom
 
 from .domains import Domain, Domains
 from .exceptions import ValueAssignmentError
 from .grid import Grid, Index
 
-BACKTRACKING_DEPTH_THRESHOLD = random.randint(35, 65)
-BACKTRACKING_PROBABILITY = random.uniform(0.35, 0.65)
+cryptogen = SystemRandom()
+
+BACKTRACKING_DEPTH_THRESHOLD = cryptogen.randint(35, 65)
+BACKTRACKING_PROBABILITY = cryptogen.uniform(0.35, 0.65)
 
 
 def _assign_value(*, grid: Grid, domains: Domains, value_index: Index) -> None:
