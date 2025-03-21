@@ -3,7 +3,7 @@
 import copy
 from collections import deque
 from functools import cache, reduce
-from typing import Deque, TypeAlias
+from typing import TypeAlias
 
 import numpy as np
 from numpy import typing as npt
@@ -191,7 +191,7 @@ class Grid:
 
     def enforce_arc_consistency(self) -> None:
         """Enforces arc-consistency algorithm (AC-3) on the sudoku."""
-        queue: Deque = deque()
+        queue: deque = deque()
 
         for value_index in self.unassigned_values_indexes:
             for neighbour in self.get_neighbours_indexes(value_index):
